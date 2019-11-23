@@ -23,15 +23,15 @@
                         <%= get_config_from_obj(widget, 'author') %>
                     </p>
                     <% } %>
-                    <% if (get_config_from_obj(widget, 'author_title')) { %>
-                    <p class="is-size-6 is-block">
-                        <%= get_config_from_obj(widget, 'author_title') %>
-                    </p>
-                    <% } %>
-                    <% if (get_config_from_obj(widget, 'location')) { %>
-                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                    <% if (get_config_from_obj(widget, 'location') || get_config_from_obj(widget, 'author_title')) { %>
+                    <p class="is-size-6 is-flex is-flex-center">
+                        <% if (get_config_from_obj(widget, 'author_title')) { %>
+                            <%= get_config_from_obj(widget, 'author_title') %>&nbsp;&nbsp;
+                        <% } %>
                         <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span><%= get_config_from_obj(widget, 'location') %></span>
+                        <% if (get_config_from_obj(widget, 'location')) { %>
+                            <span><%= get_config_from_obj(widget, 'location') %></span>
+                        <% } %>
                     </p>
                     <% } %>
                 </div>
@@ -76,10 +76,10 @@
             </div>
         </nav>
         <% if (widget.follow_link) { %>
-        <div class="level">
+        <!-- <div class="level">
             <a class="level-item button is-link is-rounded" href="<%= url_for(widget.follow_link) %>" target="_blank">
                 <%= __('widget.follow') %></a>
-        </div>
+        </div> -->
         <% } %>
         <% const socialLinks = get_config_from_obj(widget, 'social_links'); %>
         <% if (socialLinks !== null) { %>
