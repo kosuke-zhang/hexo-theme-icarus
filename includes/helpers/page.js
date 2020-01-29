@@ -55,9 +55,23 @@ module.exports = function (hexo) {
         return post.hasOwnProperty('thumbnail') && post.thumbnail;
     });
 
+    hexo.extend.helper.register('has_cover', function (post) {
+        const getConfig = hexo.extend.helper.get('get_config').bind(this);
+        const allowCover = getConfig('article.cover', true);
+        if (!allowCover) {
+            return false;
+        }
+        return post.hasOwnProperty('cover') && post.cover;
+    });
+
     hexo.extend.helper.register('get_thumbnail', function (post) {
         const hasThumbnail = hexo.extend.helper.get('has_thumbnail').bind(this)(post);
         return this.url_for(hasThumbnail ? post.thumbnail : 'images/thumbnail.svg');
+    });
+
+    hexo.extend.helper.register('get_cover', function (post) {
+        const hasCover = hexo.extend.helper.get('has_cover').bind(this)(post);
+        return this.url_for(hasCover ? post.cover : 'images/thumbnail.svg');
     });
 
     hexo.extend.helper.register('has_og_image', function (post) {

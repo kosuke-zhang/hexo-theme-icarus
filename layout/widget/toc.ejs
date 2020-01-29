@@ -1,8 +1,8 @@
-<% function buildToc(toc) {
+<% function buildToc(toc, n) {
     let result = '';
     if (toc.hasOwnProperty('id') && toc.hasOwnProperty('index') && toc.hasOwnProperty('text')) {
         result += `<li>
-        <a class="is-flex" href="#${toc.id}">
+        <a class="is-flex" style="display: inline;" href="#${toc.id}">
         <span class="has-mr-6">${toc.index}</span>
         <span>${toc.text}</span>
         </a>`;
@@ -13,9 +13,15 @@
     keys.indexOf('index') > -1 && keys.splice(keys.indexOf('index'), 1);
     keys = keys.map(k => parseInt(k)).sort((a, b) => a - b);
     if (keys.length > 0) {
-        result += '<ul class="menu-list">';
+        if (n==0){
+            result += '<ul class="menu-list"></i>';
+        } else {
+            result = result.slice(0, result.length-4) + '&nbsp;&nbsp;<i onclick="this.parentNode.nextElementSibling.setAttribute(\'style\', \'display: block\'); this.setAttribute(\'style\', \'display: none\'); this.nextElementSibling.setAttribute(\'style\', \'display: block\');" class="fa fa-chevron-down"></i><i style="display: none;" onclick="this.parentNode.nextElementSibling.setAttribute(\'style\', \'display: none\'); this.setAttribute(\'style\', \'display: none\'); this.previousElementSibling.setAttribute(\'style\', \'display: block\');" class="fa fa-chevron-right"></i></a>'
+            result += '<ul class="menu-list" style="display: none;"></i>';
+        }
         for (let i of keys) {
-            result += buildToc(toc[i]);
+            n += 1;
+            result += buildToc(toc[i], n);
         }
         result += '</ul>';
     }
@@ -24,14 +30,17 @@
     }
     return result;
 } %>
-<% let tocContent = buildToc(_toc(content)); if (tocContent !== undefined && tocContent !== ''){ %>
-    <div class="card widget" id="toc">
+<% let tocContent = buildToc(_toc(content), 0); if (tocContent !== undefined && tocContent !== ''){ %>
+    <div class="card widget column-left is-sticky is-hidden-mobile" id="toc" style="max-height: 96vh; overflow: auto;">
         <div class="card-content">
             <div class="menu">
                 <h3 class="menu-label">
-                    <%= _p('widget.catalogue', Infinity) %>
+                    <div style="display: inline;">展开目录</div>
+                    &nbsp;&nbsp;
+                    <i onclick="this.previousElementSibling.innerText='收起目录'; this.parentNode.nextElementSibling.setAttribute('style', 'display: block'); this.setAttribute('style', 'display: none'); this.nextElementSibling.setAttribute('style', 'display: inline');" class="fa fa-chevron-down"></i>
+                    <i onclick="this.previousElementSibling.previousElementSibling.innerText='展开目录'; this.parentNode.nextElementSibling.setAttribute('style', 'display: none'); this.setAttribute('style', 'display: none'); this.previousElementSibling.setAttribute('style', 'display: inline');" class="fa fa-chevron-right" style="display: none;"></i>
                 </h3>
-                <%- tocContent %>
+                <div style="display: none;"><%- tocContent %></div>
             </div>
         </div>
     </div>

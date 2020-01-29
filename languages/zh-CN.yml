@@ -19,6 +19,7 @@ widget:
     links: '链接'
     tag_cloud: '标签云'
     catalogue: '目录'
+    cloudmusic: '网易云音乐'
 article:
     more: '阅读更多'
     comments: '评论'
