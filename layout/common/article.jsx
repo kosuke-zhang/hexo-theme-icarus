@@ -17,10 +17,20 @@ function getWordCount(content) {
 }
 
 module.exports = class extends Component {
+    has_cover(post) {
+        return (post.hasOwnProperty('cover') && post.cover != null) ? true : false
+    }
+
+    get_cover(post) {
+        const { helper } = this.props;
+        const url_for = helper.url_for.bind(this);
+        return url_for(this.has_cover(post) ? post.cover : '/img/thumbnail.svg');
+    }
+
     render() {
         const { config, helper, page, index } = this.props;
         const { article, plugins } = config;
-        const { has_thumbnail, get_thumbnail, url_for, date, date_xml, __, _p } = helper;
+        const { url_for, date, date_xml, __, _p } = helper;
 
         const indexLaunguage = config.language || 'en';
         const language = page.lang || page.language || config.language || 'en';
@@ -29,11 +39,11 @@ module.exports = class extends Component {
             {/* Main content */}
             <div class="card">
                 {/* Thumbnail */}
-                {has_thumbnail(page) ? <div class="card-image">
-                    {index ? <a href={url_for(page.link || page.path)} class="image is-7by3">
-                        <img class="thumbnail" src={get_thumbnail(page)} alt={page.title || get_thumbnail(page)} />
-                    </a> : <span class="image is-7by3">
-                        <img class="thumbnail" src={get_thumbnail(page)} alt={page.title || get_thumbnail(page)} />
+                {this.has_cover(page) ? <div class="card-image">
+                    {index ? <a href={url_for(page.link || page.path)} class="image">
+                        <img class="" style="width: 100%; height: auto;" src={this.get_cover(page)} alt={page.title || this.get_cover(page)} />
+                    </a> : <span class="image">
+                        <img class="" style="width: 100%; height: auto;" src={this.get_cover(page)} alt={page.title || this.get_cover(page)} />
                     </span>}
                 </div> : null}
                 {/* Metadata */}
