@@ -18,6 +18,16 @@ function getWordCount(content) {
 }
 
 module.exports = class extends Component {
+    has_cover(post) {
+        return (post.hasOwnProperty('cover') && post.cover != null) ? true : false
+    }
+
+    get_cover(post) {
+        const { helper } = this.props;
+        const url_for = helper.url_for.bind(this);
+        return url_for(this.has_cover(post) ? post.cover : '/img/thumbnail.svg');
+    }
+
     render() {
         const { config, helper, page, index } = this.props;
         const { article, plugins } = config;
